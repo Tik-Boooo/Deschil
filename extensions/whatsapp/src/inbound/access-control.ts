@@ -75,7 +75,7 @@ export async function checkInboundAccessControl(params: {
   // configured owner number and the sender identifier, then require strict
   // equality. Bidirectional suffix/prefix matching is intentionally avoided;
   // it can admit partial or ambiguous numbers (e.g. "8112808" matching
-  // "201128112808") and breaks the privacy guarantee.
+  // "<OWNER_E164>") and breaks the privacy guarantee.
   //
   // Fail-closed policy: if the sender cannot be resolved to a digit string,
   // block the message — do not allow through on missing identity.

@@ -9,7 +9,7 @@ Connect Deschil to WhatsApp through [Green-API](https://green-api.com/en/) — a
 ```env
 GREEN_API_INS=your_instance_id
 GREEN_API_TOK=your_api_token
-DESCHIL_OWNER_NUMBER=201128112808   # Only messages from this number are processed
+DESCHIL_OWNER_NUMBER=<OWNER_E164>   # Only messages from this number are processed
 ```
 
 ### 2. Add to `openclaw.json`
@@ -21,7 +21,7 @@ DESCHIL_OWNER_NUMBER=201128112808   # Only messages from this number are process
       "enabled": true,
       "instanceId": "",
       "token": "",
-      "ownerNumber": "201128112808"
+      "ownerNumber": "<OWNER_E164>"
     }
   }
 }

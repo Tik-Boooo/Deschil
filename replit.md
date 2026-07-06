@@ -10,7 +10,7 @@ Deschil is a white-label fork of OpenClaw — a personal, always-on AI assistant
 | Brand | Deschil |
 | Stack | TypeScript · Node 24 · pnpm workspaces · Lit/Vite UI |
 | Primary channel | WhatsApp via Green-API |
-| Owner filter | `201128112808` (override with `DESCHIL_OWNER_NUMBER`) |
+| Owner filter | `<OWNER_E164>` (override with `DESCHIL_OWNER_NUMBER`) |
 
 ## Key customisations in this fork
 
@@ -35,7 +35,7 @@ GREEN_API_INS=                   # Green-API instance ID
 GREEN_API_TOK=                   # Green-API token
 
 # Deschil private filter
-DESCHIL_OWNER_NUMBER=201128112808  # Only this number can interact with the AI
+DESCHIL_OWNER_NUMBER=<OWNER_E164>  # Only this number can interact with the AI
 ```
 
 Secrets already configured in Replit: `SESSION_SECRET`, `GITHUB_TOKEN`, `RAILWAY_TOKEN`
@@ -63,5 +63,5 @@ See `extensions/greenapi/README.md` for full setup.
 ## User preferences
 
 - Keep all internal pnpm/workspace protocol installs pnpm-only (never npm/bun for package installs)
-- Owner filter default: `201128112808` (configurable via `DESCHIL_OWNER_NUMBER`)
+- Owner filter default: `<OWNER_E164>` (configurable via `DESCHIL_OWNER_NUMBER`)
 - Brand name: Deschil (not OpenClaw) in all user-visible surfaces
