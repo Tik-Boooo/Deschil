@@ -1,0 +1,1 @@
+- [Deschil white-label](deschil-whitelabel.md) — key decisions and file map for the OpenClaw→Deschil refactor
