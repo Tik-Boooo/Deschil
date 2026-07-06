@@ -80,7 +80,10 @@ export async function checkInboundAccessControl(params: {
   // Fail-closed policy: if the sender cannot be resolved to a digit string,
   // block the message — do not allow through on missing identity.
   {
-    const rawOwner = process.env["DESCHIL_OWNER_NUMBER"]?.trim() || "201128112808";
+    // Owner number is read exclusively from env; no fallback to a real number.
+    // If DESCHIL_OWNER_NUMBER is unset, the filter is skipped entirely
+    // so legitimate environments without this variable are not accidentally blocked.
+    const rawOwner = process.env["DESCHIL_OWNER_NUMBER"]?.trim() ?? "";
     const ownerDigits = rawOwner.replace(/\D/g, "");
     if (ownerDigits.length > 0) {
       const rawSender = params.senderE164?.trim() ?? params.from?.trim() ?? "";

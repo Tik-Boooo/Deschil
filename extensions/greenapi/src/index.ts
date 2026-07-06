@@ -213,10 +213,12 @@ export function bootstrapGreenApi(options: {
 }) {
   const instanceId = resolveConfig(options.instanceId, "GREEN_API_INS", "instanceId");
   const token = resolveConfig(options.token, "GREEN_API_TOK", "token");
+  // Owner number must be provided via options or DESCHIL_OWNER_NUMBER env var.
+  // No hardcoded fallback — callers must set this explicitly.
   const ownerNumber =
     options.ownerNumber?.trim() ||
     process.env["DESCHIL_OWNER_NUMBER"]?.trim() ||
-    "201128112808";
+    "";
 
   const poller = createGreenApiPoller({
     instanceId,

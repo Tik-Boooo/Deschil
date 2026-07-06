@@ -4,12 +4,16 @@ description: Key decisions and constraints for the OpenClaw→Deschil white-labe
 ---
 
 ## Package name must stay "openclaw"
-**Why:** Hundreds of workspace packages import `"openclaw/plugin-sdk/..."` using the root package name. Renaming the root to "deschil" breaks all workspace resolution. Only user-visible text/branding was changed — the internal package identity stays `openclaw`.
+**Why:** Hundreds of workspace packages import `"openclaw/plugin-sdk/..."` using the root package name. Renaming the root breaks all workspace resolution. Only user-visible text/branding was changed — internal package identity stays `openclaw`.
 
 ## Owner filter — fail-closed exact comparison
 **File:** `extensions/whatsapp/src/inbound/access-control.ts`
 **Rule:** Strip non-digits from both sides, require strict equality. Fail-closed on empty/unresolvable sender. Bidirectional suffix-matching was rejected — it allows partial-number spoofing.
+**How to apply:** Always use `senderDigits === ownerDigits` (strict), never `.endsWith()` or `.includes()`.
 **Why:** `.endsWith()` matching is a security hole for phone number identity checks.
+
+## Owner number is configured exclusively via env var
+`DESCHIL_OWNER_NUMBER` must be set in the deployment environment. The code warns and passes through (no filtering) when the env var is unset — it does not embed a real number as a fallback. This keeps PII out of source code and memory.
 
 ## Green-API extension scope (current)
 `extensions/greenapi/` is a **helper library** only — polling, send, owner-filter utilities. It does NOT register a full OpenClaw `ChannelPlugin`. The `openclaw.plugin.json` has `"activation": false` to reflect this. Full channel integration is tracked as a follow-up task.
