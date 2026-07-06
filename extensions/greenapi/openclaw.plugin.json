@@ -1,0 +1,38 @@
+{
+  "id": "greenapi",
+  "name": "WhatsApp via Green-API",
+  "description": "Deschil WhatsApp channel using Green-API (GREEN_API_INS + GREEN_API_TOK) for cloud-hosted message delivery.",
+  "icon": "https://cdn.simpleicons.org/whatsapp",
+  "activation": {
+    "onStartup": true
+  },
+  "channels": ["whatsapp-greenapi"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "instanceId": {
+        "type": "string",
+        "description": "Green-API instance ID. Falls back to GREEN_API_INS environment variable."
+      },
+      "token": {
+        "type": "string",
+        "description": "Green-API token. Falls back to GREEN_API_TOK environment variable."
+      },
+      "webhookPath": {
+        "type": "string",
+        "description": "Gateway-relative path for the Green-API webhook receiver.",
+        "default": "/greenapi/webhook"
+      },
+      "ownerNumber": {
+        "type": "string",
+        "description": "E164 owner phone number. Only messages from this number are processed. Defaults to DESCHIL_OWNER_NUMBER env var.",
+        "default": "201128112808"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  }
+}

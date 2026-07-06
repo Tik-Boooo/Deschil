@@ -1,7 +1,7 @@
 {
-  "name": "openclaw",
+  "name": "deschil",
   "version": "2026.6.11",
-  "description": "Multi-channel AI gateway with extensible messaging integrations",
+  "description": "Deschil — private AI assistant with multi-channel messaging integrations",
   "keywords": [],
   "homepage": "https://github.com/openclaw/openclaw#readme",
   "bugs": {

@@ -48,6 +48,10 @@ RUN --mount=type=bind,source=packages,target=/tmp/packages,readonly \
     done
 
 # ── Stage 2: Build ──────────────────────────────────────────────
+# ── pnpm-only build: Bun binary is available for runtime scripts that
+# ── explicitly require it, but ALL package installations use pnpm exclusively.
+# ── This avoids "Unsupported Protocol" errors from workspace: specifiers that
+# ── arise when npm/yarn/bun encounter a pnpm workspace lockfile.
 FROM ${OPENCLAW_BUN_IMAGE} AS bun-binary
 FROM ${OPENCLAW_NODE_BOOKWORM_IMAGE} AS build
 ARG OPENCLAW_BUNDLED_PLUGIN_DIR
@@ -75,11 +79,18 @@ COPY --from=workspace-deps /out/${OPENCLAW_BUNDLED_PLUGIN_DIR}/ ./${OPENCLAW_BUN
 
 # Reduce OOM risk on low-memory hosts during dependency installation.
 # Docker builds on small VMs may otherwise fail with "Killed" (exit 137).
+# pnpm-workspace-exclusive install: all workspace: protocol specifiers are
+# resolved by pnpm's own workspace resolver. npm/bun/yarn must NOT be used
+# here — they don't understand the pnpm workspace: protocol and will throw
+# "Unsupported Protocol" errors on any workspace-linked package.
+# --config.dedupe-peer-dependents=false prevents peer-dep version conflicts
+# from causing "Unsupported Protocol" false-positives in some pnpm versions.
 RUN --mount=type=cache,id=openclaw-pnpm-store,target=/root/.local/share/pnpm/store,sharing=locked \
     NODE_OPTIONS=--max-old-space-size=2048 pnpm install --frozen-lockfile \
       --config.supportedArchitectures.os=linux \
       --config.supportedArchitectures.cpu="$(node -p 'process.arch')" \
-      --config.supportedArchitectures.libc=glibc
+      --config.supportedArchitectures.libc=glibc \
+      --config.dedupe-peer-dependents=false
 
 # pnpm v10+ may append peer-resolution hashes to virtual-store folder names; do not hardcode `.pnpm/...`
 # paths. Matrix's native downloader can hit transient release CDN errors while
@@ -185,8 +196,8 @@ LABEL org.opencontainers.image.source="https://github.com/openclaw/openclaw" \
   org.opencontainers.image.url="https://openclaw.ai" \
   org.opencontainers.image.documentation="https://docs.openclaw.ai/install/docker" \
   org.opencontainers.image.licenses="MIT" \
-  org.opencontainers.image.title="OpenClaw" \
-  org.opencontainers.image.description="OpenClaw gateway and CLI runtime container image"
+  org.opencontainers.image.title="Deschil" \
+  org.opencontainers.image.description="Deschil private AI gateway — powered by OpenClaw"
 
 WORKDIR /app
 

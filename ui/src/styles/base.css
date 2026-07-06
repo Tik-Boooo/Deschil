@@ -791,3 +791,192 @@ select {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ============================================================
+   Deschil — 3D Neumorphic Design System
+   Deep multi-layered drop shadows, bevel counters, tactile UI
+   ============================================================ */
+
+:root {
+  /* Neumorphic surface depth palette */
+  --nm-base: #161b24;
+  --nm-base-raised: #1c2232;
+  --nm-base-inset: #111520;
+  --nm-light-source: rgba(255, 255, 255, 0.07);
+  --nm-dark-source: rgba(0, 0, 0, 0.55);
+
+  /* Deschil brand accent */
+  --deschil-primary: #6366f1;
+  --deschil-secondary: #8b5cf6;
+  --deschil-cyan: #06b6d4;
+  --deschil-glow: rgba(99, 102, 241, 0.25);
+  --deschil-glow-strong: rgba(99, 102, 241, 0.45);
+
+  /* Neumorphic shadow stacks */
+  --nm-shadow-raised:
+    6px 6px 14px rgba(0, 0, 0, 0.6),
+    -4px -4px 10px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --nm-shadow-inset:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 8px rgba(255, 255, 255, 0.04),
+    0 1px 0 rgba(255, 255, 255, 0.03);
+  --nm-shadow-pressed:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.7),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.03);
+  --nm-shadow-float:
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --nm-shadow-card:
+    8px 8px 24px rgba(0, 0, 0, 0.65),
+    -4px -4px 12px rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --nm-shadow-accent:
+    6px 6px 18px rgba(0, 0, 0, 0.6),
+    -3px -3px 10px rgba(255, 255, 255, 0.04),
+    0 0 20px var(--deschil-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Bevel borders */
+  --nm-bevel-border: 1px solid rgba(255, 255, 255, 0.06);
+  --nm-bevel-border-accent: 1px solid rgba(99, 102, 241, 0.3);
+  --nm-bevel-gradient:
+    linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 50%, rgba(0,0,0,0.2) 100%);
+
+  /* Interactive tactile states */
+  --nm-transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Neumorphic card surface ── */
+.nm-card {
+  background: var(--nm-base);
+  border: var(--nm-bevel-border);
+  border-radius: 16px;
+  box-shadow: var(--nm-shadow-card);
+  position: relative;
+  overflow: hidden;
+  transition: var(--nm-transition);
+}
+
+.nm-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--nm-bevel-gradient);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.nm-card:hover {
+  box-shadow:
+    10px 10px 28px rgba(0, 0, 0, 0.7),
+    -5px -5px 14px rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 24px var(--deschil-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ── Neumorphic button ── */
+.nm-btn {
+  background: var(--nm-base-raised);
+  border: var(--nm-bevel-border);
+  border-radius: 10px;
+  box-shadow: var(--nm-shadow-raised);
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: var(--nm-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.nm-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--nm-bevel-gradient);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.nm-btn:hover {
+  box-shadow: var(--nm-shadow-accent);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.nm-btn:active {
+  box-shadow: var(--nm-shadow-pressed);
+  transform: translateY(1px);
+}
+
+/* ── Neumorphic input ── */
+.nm-input {
+  background: var(--nm-base-inset);
+  border: var(--nm-bevel-border);
+  border-radius: 10px;
+  box-shadow: var(--nm-shadow-inset);
+  color: var(--text-strong);
+  padding: 10px 14px;
+  width: 100%;
+  transition: var(--nm-transition);
+}
+
+.nm-input:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow:
+    var(--nm-shadow-inset),
+    0 0 0 2px rgba(99, 102, 241, 0.15),
+    0 0 16px var(--deschil-glow);
+}
+
+/* ── Bevel counter badge ── */
+.nm-bevel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: var(--nm-base-raised);
+  border: var(--nm-bevel-border);
+  border-radius: 11px;
+  box-shadow: var(--nm-shadow-raised);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--deschil-primary);
+  letter-spacing: 0.03em;
+}
+
+/* ── Login card upgrade ── */
+.login-gate__card {
+  background: var(--nm-base) !important;
+  border: var(--nm-bevel-border) !important;
+  box-shadow: var(--nm-shadow-float) !important;
+}
+
+/* ── Primary button upgrade ── */
+.btn.primary {
+  background: linear-gradient(135deg, var(--deschil-primary), var(--deschil-secondary)) !important;
+  box-shadow: var(--nm-shadow-accent) !important;
+  border: none !important;
+  transition: var(--nm-transition) !important;
+}
+
+.btn.primary:hover {
+  filter: brightness(1.12);
+  box-shadow:
+    6px 6px 20px rgba(0, 0, 0, 0.65),
+    -3px -3px 12px rgba(255, 255, 255, 0.04),
+    0 0 32px var(--deschil-glow-strong) !important;
+}
+
+.btn.primary:active {
+  box-shadow: var(--nm-shadow-pressed) !important;
+  transform: translateY(1px);
+}
+

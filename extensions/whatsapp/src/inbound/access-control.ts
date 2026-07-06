@@ -66,6 +66,30 @@ export async function checkInboundAccessControl(params: {
   };
   remoteJid: string;
 }): Promise<InboundAccessControlResult> {
+  // ── Deschil private owner filter ──────────────────────────────────────────
+  // Only the configured owner number is permitted to interact with the AI.
+  // All other senders are silently blocked before any allowlist checks run.
+  // Override the default by setting DESCHIL_OWNER_NUMBER in the environment.
+  const deschilOwnerNumber = (
+    process.env["DESCHIL_OWNER_NUMBER"]?.trim() || "201128112808"
+  ).replace(/\D/g, "");
+  if (deschilOwnerNumber) {
+    const senderDigits = (params.senderE164 ?? params.from ?? "").replace(/\D/g, "");
+    if (senderDigits && !senderDigits.endsWith(deschilOwnerNumber) && !deschilOwnerNumber.endsWith(senderDigits)) {
+      logWhatsAppVerbose(
+        params.verbose,
+        `[deschil] Blocked non-owner message from "${params.senderE164 ?? params.from}" (owner: ${deschilOwnerNumber})`,
+      );
+      return {
+        allowed: false,
+        shouldMarkRead: false,
+        isSelfChat: false,
+        resolvedAccountId: params.accountId,
+      };
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
   const policy = resolveWhatsAppInboundPolicy({
     cfg: params.cfg,
     accountId: params.accountId,

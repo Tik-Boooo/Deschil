@@ -1,0 +1,17 @@
+{
+  "name": "@deschil/greenapi",
+  "version": "1.0.0",
+  "description": "Deschil WhatsApp via Green-API extension",
+  "type": "module",
+  "main": "./dist/index.js",
+  "files": ["dist/", "openclaw.plugin.json"],
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {
+    "openclaw": "workspace:*"
+  }
+}

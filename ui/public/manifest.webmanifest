@@ -1,7 +1,7 @@
 {
-  "name": "OpenClaw Control",
-  "short_name": "OpenClaw",
-  "description": "Multi-channel AI gateway control panel",
+  "name": "Deschil Control",
+  "short_name": "Deschil",
+  "description": "Private AI assistant control panel",
   "start_url": "./",
   "display": "standalone",
   "theme_color": "#0a0a0a",

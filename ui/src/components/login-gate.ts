@@ -303,11 +303,33 @@ function renderLoginGate(props: LoginGateProps) {
   });
 
   return html`
-    <div class="login-gate">
+    <div class="login-gate deschil-login-gate">
+      <!-- Deschil 3D neumorphic splash banner -->
+      <div class="deschil-splash" aria-hidden="true">
+        <div class="deschil-splash__inner">
+          <div class="deschil-splash__orb deschil-splash__orb--1"></div>
+          <div class="deschil-splash__orb deschil-splash__orb--2"></div>
+          <div class="deschil-splash__orb deschil-splash__orb--3"></div>
+          <div class="deschil-splash__brand">
+            <img class="deschil-splash__logo" src=${faviconSrc} alt="Deschil" width="64" height="64" />
+            <div class="deschil-splash__wordmark">Deschil</div>
+            <div class="deschil-splash__tagline">Private AI · Secure · Always-On</div>
+          </div>
+          <div class="deschil-splash__dynamic-image-wrap">
+            <img
+              class="deschil-splash__dynamic-img"
+              src="https://i.postimg.cc/0jDhSdNX/deschil-splash.png"
+              alt="Deschil"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
+          </div>
+        </div>
+      </div>
       <div class="login-gate__card">
         <div class="login-gate__header">
-          <img class="login-gate__logo" src=${faviconSrc} alt="OpenClaw" />
-          <div class="login-gate__title">OpenClaw</div>
+          <img class="login-gate__logo" src=${faviconSrc} alt="Deschil" />
+          <div class="login-gate__title">Deschil</div>
           <div class="login-gate__sub">${t("login.subtitle")}</div>
         </div>
         <div class="login-gate__form">
