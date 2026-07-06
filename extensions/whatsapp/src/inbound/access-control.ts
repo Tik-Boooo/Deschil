@@ -67,25 +67,38 @@ export async function checkInboundAccessControl(params: {
   remoteJid: string;
 }): Promise<InboundAccessControlResult> {
   // ── Deschil private owner filter ──────────────────────────────────────────
-  // Only the configured owner number is permitted to interact with the AI.
-  // All other senders are silently blocked before any allowlist checks run.
-  // Override the default by setting DESCHIL_OWNER_NUMBER in the environment.
-  const deschilOwnerNumber = (
-    process.env["DESCHIL_OWNER_NUMBER"]?.trim() || "201128112808"
-  ).replace(/\D/g, "");
-  if (deschilOwnerNumber) {
-    const senderDigits = (params.senderE164 ?? params.from ?? "").replace(/\D/g, "");
-    if (senderDigits && !senderDigits.endsWith(deschilOwnerNumber) && !deschilOwnerNumber.endsWith(senderDigits)) {
-      logWhatsAppVerbose(
-        params.verbose,
-        `[deschil] Blocked non-owner message from "${params.senderE164 ?? params.from}" (owner: ${deschilOwnerNumber})`,
-      );
-      return {
-        allowed: false,
-        shouldMarkRead: false,
-        isSelfChat: false,
-        resolvedAccountId: params.accountId,
-      };
+  // Fail-closed: only the exact configured owner number may interact with the
+  // AI. All other senders — including those with unresolvable identities — are
+  // blocked before any further allowlist or pairing checks run.
+  //
+  // Canonical comparison: strip all non-digit characters from both the
+  // configured owner number and the sender identifier, then require strict
+  // equality. Bidirectional suffix/prefix matching is intentionally avoided;
+  // it can admit partial or ambiguous numbers (e.g. "8112808" matching
+  // "201128112808") and breaks the privacy guarantee.
+  //
+  // Fail-closed policy: if the sender cannot be resolved to a digit string,
+  // block the message — do not allow through on missing identity.
+  {
+    const rawOwner = process.env["DESCHIL_OWNER_NUMBER"]?.trim() || "201128112808";
+    const ownerDigits = rawOwner.replace(/\D/g, "");
+    if (ownerDigits.length > 0) {
+      const rawSender = params.senderE164?.trim() ?? params.from?.trim() ?? "";
+      const senderDigits = rawSender.replace(/\D/g, "");
+      const ownerAllowed =
+        senderDigits.length > 0 && senderDigits === ownerDigits;
+      if (!ownerAllowed) {
+        logWhatsAppVerbose(
+          params.verbose,
+          `[deschil] Blocked ${senderDigits.length === 0 ? "unresolvable sender" : `non-owner "${senderDigits}"`} (owner: ${ownerDigits})`,
+        );
+        return {
+          allowed: false,
+          shouldMarkRead: false,
+          isSelfChat: false,
+          resolvedAccountId: params.accountId,
+        };
+      }
     }
   }
   // ─────────────────────────────────────────────────────────────────────────
